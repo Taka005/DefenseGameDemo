@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-undef": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/explicit-module-boundary-types": "warn",
+    "typescript/no-unused-vars": "warn",
+  },
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  }
+}
