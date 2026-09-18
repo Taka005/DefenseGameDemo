@@ -19,13 +19,16 @@ export class Enemy extends Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
   }
 
-  public startOnPath(path: Curves.Path): void{
+  public setsPath(path: Curves.Path): void{
     this.path = path;
     this.t = 0;
 
     this.health = 100;
     this.setAlpha(1);
     this.scene.tweens.killTweensOf(this);
+
+    this.onEndCallback = undefined;
+    this.onKilledCallback = undefined;
     
     if (this.path) {
       const startPoint = this.path.getPoint(0);
@@ -71,7 +74,6 @@ export class Enemy extends Physics.Arcade.Sprite {
     this.health -= bullet.damage;
 
     if (this.health <= 0) {
-      this.setActive(false);
       if (this.body) this.body.enable = false;
 
       this.scene.tweens.add({
@@ -81,6 +83,7 @@ export class Enemy extends Physics.Arcade.Sprite {
         yoyo: true,
         repeat: 2,
         onComplete: () => {
+          this.setActive(false);
           this.setVisible(false);
           this.onKilledCallback?.();
         }

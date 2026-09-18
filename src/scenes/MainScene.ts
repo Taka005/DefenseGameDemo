@@ -162,7 +162,7 @@ export class MainScene extends Scene {
         enemy.body.enable = true;
       }
       
-      enemy.startOnPath(this.enemyPath);
+      enemy.setsPath(this.enemyPath);
 
       enemy.onEnd(() => {
         this.escapedCount++;
@@ -188,7 +188,7 @@ export class MainScene extends Scene {
       facility.update(time, delta);
     });
 
-    if (this.life <= 0||this.escapedCount + this.killedCount >= 16) {
+    if(this.killedCount >= 16) {
       this.isGameOver = true;
 
       this.highlightRect.setVisible(false);
@@ -196,9 +196,7 @@ export class MainScene extends Scene {
       this.scene.pause(HudScene.KEY);
       this.scene.pause(MainScene.KEY);
       this.scene.launch(GameOverScene.KEY);
-    }
-
-    if(this.killedCount >= 16) {
+    }else if (this.life <= 0||this.escapedCount + this.killedCount >= 16) {
       this.isGameOver = true;
 
       this.highlightRect.setVisible(false);
