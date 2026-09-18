@@ -1,5 +1,6 @@
 import { Bullet } from "./Bullet";
 import Phaser from "phaser";
+import { Physics } from "phaser";
 
 export class Facility extends Phaser.GameObjects.Sprite {
   public bullets: Phaser.GameObjects.Group;
@@ -7,21 +8,16 @@ export class Facility extends Phaser.GameObjects.Sprite {
   private fireTimer: number = 0;
   private fireInterval: number = 500;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, angle: number) {
+  constructor(scene: Phaser.Scene, x: number, y: number, angle: number, bulletGroup: Physics.Arcade.Group) {
     super(scene, x, y, "facility");
     this.angle = angle;
+    this.bullets = bulletGroup;
 
     this.setOrigin(0.5, 0.5);
     this.setSize(30, 30);
     this.setDisplaySize(30, 30);
 
     scene.add.existing(this);
-
-    this.bullets = scene.physics.add.group({
-      classType: Bullet,
-      maxSize: 100,
-      runChildUpdate: true
-    });
   }
 
   public fireBullet(): void {

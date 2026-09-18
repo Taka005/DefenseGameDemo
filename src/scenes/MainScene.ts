@@ -12,6 +12,7 @@ export class MainScene extends Scene {
   public stage!: Stage;
   public facilities: Facility[] = [];
   public enemies!: Physics.Arcade.Group;
+  public bulletsGroup!: Physics.Arcade.Group;
   private enemyPath!: Curves.Path;
   public life!: number;
   private isGameOver: boolean = false;
@@ -83,6 +84,17 @@ export class MainScene extends Scene {
       runChildUpdate: true
     });
 
+    this.bulletsGroup = this.physics.add.group({
+      classType: Bullet,
+      maxSize: 200,
+      runChildUpdate: true
+    });
+
+    this.physics.add.overlap(this.bulletsGroup, this.enemies, (bullet, enemy) => {
+      (bullet as Bullet).destroyBullet();
+      (enemy as Enemy).damage(bullet as Bullet);
+    });
+
     this.time.addEvent({
       delay: 800,               
       repeat: 15,
@@ -136,13 +148,8 @@ export class MainScene extends Scene {
         const exists = this.facilities.some(f => Math.abs(f.x - pos.x) < 1 && Math.abs(f.y - pos.y) < 1);
         if (exists) return;
 
-        const facility = new Facility(this, pos.x, pos.y, this.angle);
+        const facility = new Facility(this, pos.x, pos.y, this.angle,this.bulletsGroup);
         this.facilities.push(facility);
-
-        this.physics.add.overlap(facility.bullets, this.enemies, (bullet, enemy) => {
-          (bullet as Bullet).destroyBullet();
-          (enemy as Enemy).damage(bullet as Bullet);
-        });
       }
     });
   }
